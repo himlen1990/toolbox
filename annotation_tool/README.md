@@ -11,11 +11,11 @@ Usage
 
 2.click load point cloud directory button and open your dataset direction.
 (default point cloud format is ply and PointXYZRGB, you can change it to pcd by editing the source code).
-![image](https://github.com/himlen1990/point_cloud_annotation_tool/blob/master/IMG/1.png)
-![image](https://github.com/himlen1990/point_cloud_annotation_tool/blob/master/IMG/2.png)
+![image](https://github.com/himlen1990/toolbox/blob/master/annotation_tool/IMG/1.png)
+![image](https://github.com/himlen1990/toolbox/blob/master/annotation_tool/IMG/2.png)
 
 3.click add marker and start annotation (you can also change the marker type by clicking swith marker). 
-![image](https://github.com/himlen1990/point_cloud_annotation_tool/blob/master/IMG/3.png)
+![image](https://github.com/himlen1990/toolbox/blob/master/annotation_tool/IMG/3.png)
 
 4.click save label and move to next frame after you finishing annotate the current frame.
 

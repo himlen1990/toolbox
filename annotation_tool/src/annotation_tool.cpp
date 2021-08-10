@@ -269,17 +269,25 @@ void AnnotationTool::loadPointCloudDir()
   QList<QFileInfo> *fileInfo=new QList<QFileInfo>(dir->entryInfoList(filter));
   for(int i = 0;i<fileInfo->count(); i++)
     {
-	  std::string file_path = fileInfo->at(i).filePath().toStdString();
-	  std::string suffix = file_path.substr(file_path.size()-3);
-	  if(suffix == "ply")
-		{
-		  pointcloud_files.push_back(file_path);
-		}
-	}
+      std::string file_path = fileInfo->at(i).filePath().toStdString();
+      std::string suffix = file_path.substr(file_path.size()-3);
+      if (suffix == "ply" || suffix == "pcd")
+      {
+        pointcloud_files.push_back(file_path);
+      }
+    }
   if(pointcloud_files.size()>0)
 	{
-	  pcl::PLYReader Reader;
-	  Reader.read(pointcloud_files[0], *current_cloud);
+    std::string suffix = pointcloud_files[0].substr(pointcloud_files[0].size()-3);
+    if(suffix == "ply")
+    {
+      pcl::PLYReader Reader;
+      Reader.read(pointcloud_files[0], *current_cloud);
+    }
+    else if(suffix == "pcd")
+    {
+      pcl::io::loadPCDFile(pointcloud_files[0], *current_cloud);
+    }
 	  PublishPointCloud(current_cloud);
 	  num_annotated_cloud = 0;	  
 	}
@@ -288,8 +296,16 @@ void AnnotationTool::loadPointCloudDir()
 void AnnotationTool::loadPointCloud()
 {
   std::string path = pointcloud_files[num_annotated_cloud];
-  pcl::PLYReader Reader;
-  Reader.read(path, *current_cloud);
+  std::string suffix = path.substr(path.size()-3);
+  if(suffix == "ply")
+  {
+    pcl::PLYReader Reader;
+    Reader.read(path, *current_cloud);
+  }
+  else if(suffix == "pcd")
+  {
+    pcl::io::loadPCDFile(path, *current_cloud);
+  }
   PublishPointCloud(current_cloud);
 }
 

@@ -263,6 +263,8 @@ void AnnotationTool::PublishPointCloud(pcl::PointCloud<PCType>::Ptr cloud)
 
 void AnnotationTool::loadPointCloudDir()
 {
+  if(pointcloud_files.size()>0)
+    pointcloud_files.clear();
   QString filename = QFileDialog::getExistingDirectory();
   QDir *dir=new QDir(filename);
   QStringList filter;

@@ -28,6 +28,7 @@
 #include <fstream>
 
 #define HSR 0
+#define AERO 1
 
 #define COLOR true; //true for colored point cloud
 #ifdef COLOR

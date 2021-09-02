@@ -4,7 +4,8 @@ AnnotationTool::AnnotationTool( QWidget* parent )
   : QWidget( parent ),current_cloud (new pcl::PointCloud<PCType>)
 {
 
-  device = HSR;
+  //device = HSR;
+  device = AERO;
   // Construct and lay out render panel.
   render_panel_ = new rviz::RenderPanel();
   QHBoxLayout* H_layout = new QHBoxLayout;
@@ -121,8 +122,16 @@ void AnnotationTool::addMarker()
 
   server->applyChanges();
   num_marker++;
-  float pos[] = {pre_marker_x,pre_marker_y,pre_marker_z, 0, 0.707107, 0, 0.707107};
-  label.push_back(std::vector<float>(pos, pos + sizeof(pos) / sizeof(float))); 
+  if (device==HSR)
+    {
+      float pos[] = {pre_marker_x,pre_marker_y,pre_marker_z, 0, 0.707107, 0, 0.707107};
+      label.push_back(std::vector<float>(pos, pos + sizeof(pos) / sizeof(float)));
+    }
+  else
+    {
+      float pos[] = {pre_marker_x,pre_marker_y,pre_marker_z, 1, 0, 0, 0};
+      label.push_back(std::vector<float>(pos, pos + sizeof(pos) / sizeof(float)));
+    }
 
 }
 
@@ -279,20 +288,21 @@ void AnnotationTool::loadPointCloudDir()
       }
     }
   if(pointcloud_files.size()>0)
+    {
+      std::string suffix = pointcloud_files[0].substr(pointcloud_files[0].size()-3);
+      if(suffix == "ply")
 	{
-    std::string suffix = pointcloud_files[0].substr(pointcloud_files[0].size()-3);
-    if(suffix == "ply")
-    {
-      pcl::PLYReader Reader;
-      Reader.read(pointcloud_files[0], *current_cloud);
-    }
-    else if(suffix == "pcd")
-    {
-      pcl::io::loadPCDFile(pointcloud_files[0], *current_cloud);
-    }
-	  PublishPointCloud(current_cloud);
-	  num_annotated_cloud = 0;	  
+	  pcl::PLYReader Reader;
+	  Reader.read(pointcloud_files[0], *current_cloud);
 	}
+      else if(suffix == "pcd")
+	{
+	  pcl::io::loadPCDFile(pointcloud_files[0], *current_cloud);
+	}
+      std::cout<<pointcloud_files[0]<<std::endl;
+      PublishPointCloud(current_cloud);
+      num_annotated_cloud = 0;	  
+    }
 }
 
 void AnnotationTool::loadPointCloud()
@@ -399,9 +409,9 @@ void AnnotationTool::loadAnnotation()
 	  marker.scale.y = 0.1 * marker_scale;
 	  marker.scale.z = 0.1 * marker_scale;
 
-	  marker.color.r = 0.0f;
-	  marker.color.g = 1.0f;
-	  marker.color.b = 0.0f;
+	  marker.color.r = 0.0;
+	  marker.color.g = 1.0;
+	  marker.color.b = 0.0;
 	  marker.color.a = 1.0;
 	  vMarker.push_back(marker);
 	}

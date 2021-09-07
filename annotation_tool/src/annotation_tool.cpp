@@ -334,8 +334,13 @@ void AnnotationTool::saveAnnotation()
     }
   file.close();
   num_annotated_cloud += 1;
-  loadPointCloud();
-  removeMarker();
+  if(num_annotated_cloud < pointcloud_files.size())
+    {
+      loadPointCloud();
+      removeMarker();
+    }
+  else
+    std::cout<<"this is the last point cloud"<<std::endl;
 }
 
 void AnnotationTool::switch_marker()
